@@ -1,0 +1,21 @@
+#include<stdio.h>
+int f(int n){
+	int i;
+	int count=0;
+	if(n==1)
+	return 1;
+	else
+	    for(i=2;i<=n;i++){
+    		if(n%i==0)
+    		   count+=f(n/i);
+    	}
+return count;
+}
+int main(){
+	printf("请输入n的值:");
+	int n;
+	scanf("%d",&n);
+	//f(n);
+	printf("%d有%d中不同的分解模式\n",n,f(n)); 
+	return 0;
+}
