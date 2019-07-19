@@ -1,0 +1,74 @@
+#include<stdio.h>
+int n,c[10000],bestp;//物品的个数，背包的属性限制，最大价值
+int p[10000],w[10000][10000],x[10000],bestx[10000];//物品的价值，物品的属性对应值，x[i]暂存物品的选中情况,物品的选中情况
+int a;//物品属性个数；
+
+
+int f(int k,int j,int i,int cw[]){
+if(k>a)
+return 1;
+else 
+if(cw[k]+j*w[k][i]<=c[k])
+f(k+1,j,i,cw);
+else return 0;
+}
+
+void Backtrack(int i,int cp,int cw[])
+{ //cw当前包内物品重量，cp当前包内物品价值
+    int j,k,b,h;
+    if(i>n)//回溯结束
+    {
+        if(cp>bestp)
+        {
+            bestp=cp;
+            for(i=1;i<=n;i++)
+bestx[i]=x[i];
+        }
+    }
+    else 
+        for(j=0;j<=1;j++)  
+        {
+            x[i]=j;
+      
+            if(f(1,j,i,cw))
+			   
+            {
+                for(b=1;b<=a;b++)
+                cw[b]+=w[b][i]*x[i];
+                cp+=p[i]*x[i];
+                Backtrack(i+1,cp,cw);
+                for(h=1;h<=a;h++)
+                cw[h]-=w[h][i]*x[i];
+                cp-=p[i]*x[i];
+            }
+        }
+}
+
+void main()
+{
+    int i,j;
+    bestp=0; 
+    printf("请输入物品个数和属性个数:\n");
+    scanf("%d%d",&n,&a);
+    printf("请依次输入物品的价值:\n");
+    for(i=1;i<=n;i++) 
+        scanf("%d",&p[i]);
+    printf("请依次输入物品的属性的数值:\n");
+     for(j=1;j<=a;j++)
+         for(i=1;i<=n;i++) 
+        scanf("%d",&w[j][i]);
+    printf("请依次输入物品的属性限制:\n");
+     for(i=1;i<=a;i++) 
+        scanf("%d",&c[i]);
+    int cw[10000];
+    for(i=1;i<=a;i++)
+       cw[i]=0;
+    Backtrack(1,0,cw);
+    printf("最大价值为:\n");
+    printf("%d\n",bestp);
+    printf("被选中的物品依次是(0表示未选中，1表示选中)\n");
+    for(i=1;i<=n;i++) 
+        printf("%d ",bestx[i]);
+    printf("\n");
+
+}
